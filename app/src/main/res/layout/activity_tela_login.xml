@@ -15,45 +15,45 @@
         android:id="@+id/et_login"
         android:password="false"
         android:singleLine="false"
-        android:text="Login"
         android:textAlignment="center"
         android:textColor="#009688"
         android:editable="true"
-        android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/et_senha"
         android:clickable="false"
-        android:inputType="text" />
+        android:inputType="text"
+        android:layout_below="@+id/imageView"
+        android:layout_alignStart="@+id/et_senha"
+        android:layout_marginTop="36dp"
+        android:hint="Login" />
 
     <EditText
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/et_senha"
         android:gravity="center_vertical"
-        android:text="Senha"
         android:textAlignment="center"
         android:textColor="#009688"
         android:layout_below="@+id/et_login"
         android:layout_alignStart="@+id/bt_entrar"
         android:layout_marginTop="36dp"
         android:password="false"
-        android:inputType="textPassword|text" />
+        android:inputType="textPassword|text"
+        android:hint="Senha" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:background="@drawable/logotop"
+        android:layout_marginTop="57dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="75dp"
-        android:layout_alignEnd="@+id/et_login"
-        android:layout_alignStart="@+id/et_login" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Entrar"
         android:id="@+id/bt_entrar"
-        android:background="#26A69A"
+        android:background="@color/colorPrimary"
         android:textColor="#ffffffff"
         android:layout_marginTop="51dp"
         android:layout_below="@+id/et_senha"
@@ -65,7 +65,7 @@
         android:text="Cadastre-se"
         android:id="@+id/tv_cadastrese"
         android:textSize="20dp"
-        android:textColor="#009688"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_below="@+id/bt_entrar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp" />

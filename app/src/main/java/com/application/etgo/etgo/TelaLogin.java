@@ -1,12 +1,12 @@
 package com.application.etgo.etgo;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class TelaLogin extends AppCompatActivity {
+public class TelaLogin extends Activity {
 
     private EditText etLogin, etSenha;
     private Button btEntrar;
