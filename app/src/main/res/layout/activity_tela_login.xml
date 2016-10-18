@@ -14,14 +14,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/et_login"
         android:password="false"
-        android:singleLine="true"
+        android:singleLine="false"
         android:text="Login"
         android:textAlignment="center"
         android:textColor="#009688"
-        android:editable="false"
-        android:gravity="center_vertical"
+        android:editable="true"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/et_senha" />
+        android:layout_alignStart="@+id/et_senha"
+        android:clickable="false"
+        android:inputType="text" />
 
     <EditText
         android:layout_width="250dp"
@@ -33,16 +34,19 @@
         android:textColor="#009688"
         android:layout_below="@+id/et_login"
         android:layout_alignStart="@+id/bt_entrar"
-        android:layout_marginTop="36dp" />
+        android:layout_marginTop="36dp"
+        android:password="false"
+        android:inputType="textPassword|text" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:src="@drawable/logoEtgo"
-        android:layout_marginTop="62dp"
+        android:background="@drawable/logotop"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="75dp"
+        android:layout_alignEnd="@+id/et_login"
+        android:layout_alignStart="@+id/et_login" />
 
     <Button
         android:layout_width="250dp"

@@ -18,4 +18,12 @@ public class TelaLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_login);
     }
+
+
+    public void inicializaComponentes(){
+        this.etLogin = (EditText)findViewById(R.id.et_login);
+        this.etSenha = (EditText)findViewById(R.id.et_senha);
+        this.btEntrar = (Button)findViewById(R.id.bt_entrar);
+
+    }
 }
