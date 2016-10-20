@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Cadastrar"
+        android:id="@+id/bt_cadastrar"
+        android:layout_marginBottom="92dp"
+        android:textColor="#ffffffff"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_login_cadastrar"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="132dp"
+        android:hint="Login"
+        android:textAlignment="center" />
+
+    <EditText
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_senha_cadastrar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:hint="Senha"
+        android:textAlignment="center" />
+
+</RelativeLayout>
