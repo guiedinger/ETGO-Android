@@ -1,5 +1,7 @@
 package ws.REST;
 
+import android.util.Log;
+
 import POJOS.Login;
 
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 public class LoginConsumer {
 
     RestTemplate restTemplate;
-    public static final String URL_BASE = "http://10.0.2.2:8080/EtgoServidor/rest/login";
+    public static final String URL_BASE = "http://192.168.240.118:8080/EtgoServidor/rest/login";
 
     public LoginConsumer() {
         restTemplate = new RestTemplate();
@@ -20,8 +22,11 @@ public class LoginConsumer {
     }
 
     public Login chamaCadastrar(Login login){
+
         ResponseEntity<Login> response = restTemplate.postForEntity(URL_BASE, login, Login.class);
         login = response.getBody();
         return login;
     }
+
+
 }

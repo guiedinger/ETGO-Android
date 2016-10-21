@@ -1,31 +1,74 @@
 package POJOS;
 
-/**
- * Created by Guilherme on 20/10/2016.
- */
-public class Login {
+import java.io.Serializable;
+
+public class Login implements Serializable {
 
     private String userName;
-    private String senha;
 
-    public Login(String senha, String userName) {
-        this.senha = senha;
-        this.userName = userName;
-    }
+    private String password;
 
-    public String getSenha() {
-        return senha;
-    }
+    private String token;
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+    private Usuario usuario;
+
 
     public String getUserName() {
         return userName;
     }
 
+
+
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
+
+
+
+    public String getPassword() {
+        return password;
+    }
+
+
+
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+
+    public Login(String userName, String password) {
+        super();
+        this.userName = userName;
+        this.password = password;
+    }
+
+
+
+
+    public Login() {
+
+    }
+
+
+
 }
