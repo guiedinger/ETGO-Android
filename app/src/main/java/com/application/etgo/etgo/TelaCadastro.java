@@ -8,19 +8,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import POJOS.Login;
 import ws.REST.LoginConsumer;
 
-/**
- * Created by Guilherme on 20/10/2016.
- */
 public class TelaCadastro extends Activity {
 
     private EditText etLoginCadastrar, etSenhaCadatrar;
     private Login login;
     private LoginConsumer loginConsumer;
     private Button btCadastrar;
+    private ProgressBar pbCadastrar;
 
 
     @Override
@@ -28,10 +27,13 @@ public class TelaCadastro extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_cadastro);
 
+
         this.inicializaComponentes();
         this.btCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btCadastrar.setEnabled(false);
+                pbCadastrar.setVisibility(View.VISIBLE);
                 Log.i("debug","passou");
                 login.setUserName(etLoginCadastrar.getText().toString());
                 login.setPassword(etSenhaCadatrar.getText().toString());
@@ -54,6 +56,7 @@ public class TelaCadastro extends Activity {
         this.btCadastrar = (Button)findViewById(R.id.bt_cadastrar);
         this.login = new Login();
         this.loginConsumer = new LoginConsumer();
+        this.pbCadastrar = (ProgressBar)findViewById(R.id.pb_cadastrar);
     }
 
 
@@ -65,6 +68,7 @@ public class TelaCadastro extends Activity {
             Log.i("debug",login.getUserName()+":"+login.getPassword());
             return login;
         }
+
 
         @Override
         protected void onPostExecute(Login login) {

@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 public class LoginConsumer {
 
     RestTemplate restTemplate;
-    public static final String URL_BASE = "http://192.168.240.118:8080/EtgoServidor/rest/login";
+    public static final String URL_BASE = "http://192.168.0.3:8080/EtgoServidor/rest/login";
 
     public LoginConsumer() {
         restTemplate = new RestTemplate();

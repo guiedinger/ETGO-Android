@@ -63,8 +63,6 @@ public class Login implements Serializable {
     }
 
 
-
-
     public Login() {
 
     }

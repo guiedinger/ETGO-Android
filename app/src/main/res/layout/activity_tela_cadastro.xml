@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:text="Cadastrar"
         android:id="@+id/bt_cadastrar"
-        android:layout_marginBottom="92dp"
+        android:layout_marginBottom="62dp"
         android:textColor="#ffffffff"
         android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
@@ -17,19 +17,41 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/et_login_cadastrar"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="132dp"
         android:hint="Login"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:layout_above="@+id/et_senha_cadastrar"
+        android:layout_alignStart="@+id/et_senha_cadastrar"
+        android:layout_marginBottom="73dp"
+        android:editable="true"
+        android:inputType="text" />
 
     <EditText
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/et_senha_cadastrar"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:hint="Senha"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:layout_above="@+id/bt_cadastrar"
+        android:layout_alignStart="@+id/bt_cadastrar"
+        android:layout_marginBottom="67dp"
+        android:inputType="textPassword" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:background="@drawable/logotop"
+        android:layout_above="@+id/et_login_cadastrar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="49dp" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pb_cadastrar"
+        android:indeterminate="false"
+        android:layout_alignTop="@+id/bt_cadastrar"
+        android:layout_toStartOf="@+id/bt_cadastrar"
+        android:visibility="invisible"/>
 
 </RelativeLayout>
