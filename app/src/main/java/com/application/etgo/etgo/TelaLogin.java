@@ -2,13 +2,20 @@ package com.application.etgo.etgo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import POJOS.Login;
+import ws.REST.LoginConsumer;
 
 public class TelaLogin extends Activity {
 
@@ -16,6 +23,8 @@ public class TelaLogin extends Activity {
     private Button btEntrar;
     private Login login;
     private TextView tvCadastrese;
+    private LoginConsumer loginConsumer;
+    private ResponseEntity<Login> loginResponseEntity;
 
 
     @Override
@@ -30,14 +39,15 @@ public class TelaLogin extends Activity {
                 chamaTelaCadastrar();
             }
         });
-/*        this.btEntrar.setOnClickListener(new View.OnClickListener() {
+        this.btEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login.setUserName(etLogin.getText().toString());
-                login.setSenha(etSenha.getText().toString());
-
+                login.setPassword(etSenha.getText().toString());
+                Log.i("debug","chegou");
+                new HttpRequestTask().execute();
             }
-        });*/
+        });
     }
 
     private void chamaTelaCadastrar(){
@@ -46,11 +56,40 @@ public class TelaLogin extends Activity {
         finish();
     }
 
+    private void chamaTelaPassageiro(){
+        Intent itTelaPassageiro = new Intent(this, TelaPassageiro.class);
+        startActivity(itTelaPassageiro);
+        finish();
+    }
+
+
     public void inicializaComponentes(){
         this.etLogin = (EditText)findViewById(R.id.et_login);
         this.etSenha = (EditText)findViewById(R.id.et_senha);
         this.btEntrar = (Button)findViewById(R.id.bt_entrar);
         this.tvCadastrese = (TextView)findViewById(R.id.tv_cadastrese);
+        this.loginConsumer = new LoginConsumer();
+        this.login = new Login();
+        this.loginResponseEntity = new ResponseEntity<Login>(HttpStatus.ACCEPTED);
+    }
 
+    private class HttpRequestTask extends AsyncTask<Void,Void,Login> {
+        @Override
+        protected Login doInBackground(Void... params) {
+            Log.i("debug",login.getUserName()+":"+login.getPassword());
+            loginResponseEntity = loginConsumer.logar(login);
+            if(loginResponseEntity.getStatusCode() == HttpStatus.OK){
+                chamaTelaPassageiro();
+            }else{
+                Toast.makeText(TelaLogin.this,loginResponseEntity.getBody().toString(),Toast.LENGTH_LONG);
+            }
+            return login;
+        }
+
+        @Override
+        protected void onPostExecute(Login login) {
+            super.onPostExecute(login);
+
+        }
     }
 }
