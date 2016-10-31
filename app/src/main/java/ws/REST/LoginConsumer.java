@@ -27,7 +27,7 @@ import java.util.Map;
 public class LoginConsumer {
 
     RestTemplate restTemplate;
-    public static final String URL_BASE = "http://192.168.0.7:8080/EtgoServidor/rest/login";
+    public static final String URL_BASE = "http://192.168.0.4:8080/EtgoServidor/rest/login";
 
     public LoginConsumer() {
         restTemplate = new RestTemplate();
@@ -46,8 +46,14 @@ public class LoginConsumer {
         map.add("password",login.getPassword());
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+        ResponseEntity<Login> response = new ResponseEntity<Login>(HttpStatus.BAD_REQUEST);
 
-        ResponseEntity<Login> response = restTemplate.postForEntity(URL_BASE, request, Login.class);
+        try{
+            response = restTemplate.postForEntity(URL_BASE, request, Login.class);
+        }catch (Exception e){
+            Log.i("debug",e.getMessage()+e.getCause());
+        }
+
 
         return response;
     }

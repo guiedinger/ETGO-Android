@@ -62,6 +62,10 @@ public class TelaLogin extends Activity {
         finish();
     }
 
+    public void chamaToastErro(){
+        Toast.makeText(TelaLogin.this,"Erro ao logar!",Toast.LENGTH_LONG);
+    }
+
 
     public void inicializaComponentes(){
         this.etLogin = (EditText)findViewById(R.id.et_login);
@@ -81,10 +85,12 @@ public class TelaLogin extends Activity {
             if(loginResponseEntity.getStatusCode() == HttpStatus.OK){
                 chamaTelaPassageiro();
             }else{
-                Toast.makeText(TelaLogin.this,loginResponseEntity.getBody().toString(),Toast.LENGTH_LONG);
+                //chamaToastErro();
+                login.setToken("ERROR");
             }
             return login;
         }
+
 
         @Override
         protected void onPostExecute(Login login) {
