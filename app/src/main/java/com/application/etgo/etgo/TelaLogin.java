@@ -2,20 +2,20 @@ package com.application.etgo.etgo;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import POJOS.Login;
-import ws.REST.LoginConsumer;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import ws.REST.LoginConnectionManager;
 
 public class TelaLogin extends Activity {
 
@@ -23,8 +23,7 @@ public class TelaLogin extends Activity {
     private Button btEntrar;
     private Login login;
     private TextView tvCadastrese;
-    private LoginConsumer loginConsumer;
-    private ResponseEntity<Login> loginResponseEntity;
+    private ProgressBar pbLogin;
 
 
     @Override
@@ -42,10 +41,28 @@ public class TelaLogin extends Activity {
         this.btEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login.setUserName(etLogin.getText().toString());
-                login.setPassword(etSenha.getText().toString());
-                Log.i("debug","chegou");
-                new HttpRequestTask().execute();
+                btEntrar.setEnabled(false);
+                pbLogin.setVisibility(View.VISIBLE);
+/*                login.setUserName(etLogin.getText().toString());
+                login.setPassword(etSenha.getText().toString());*/
+                LoginConnectionManager.posForLogin(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Login>() {
+                    @Override
+                    public void onResponse(Call<Login> call, Response<Login> response) {
+                        if(response.isSuccessful()){
+                            chamaTelaPassageiro();
+                        }else{
+                            chamaToastDadosInvalidos();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Login> call, Throwable t) {
+                        chamaToastErro();
+                        Log.i("debug","io error :"+t.getMessage());
+                    }
+                });
+                btEntrar.setEnabled(true);
+                pbLogin.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -62,8 +79,12 @@ public class TelaLogin extends Activity {
         finish();
     }
 
+    public void chamaToastDadosInvalidos(){
+        Toast.makeText(TelaLogin.this, "Dados Inválidos!",Toast.LENGTH_LONG).show();
+    }
+
     public void chamaToastErro(){
-        Toast.makeText(TelaLogin.this,"Erro ao logar!",Toast.LENGTH_LONG);
+        Toast.makeText(TelaLogin.this,"Erro ao logar!",Toast.LENGTH_LONG).show();
     }
 
 
@@ -72,30 +93,8 @@ public class TelaLogin extends Activity {
         this.etSenha = (EditText)findViewById(R.id.et_senha);
         this.btEntrar = (Button)findViewById(R.id.bt_entrar);
         this.tvCadastrese = (TextView)findViewById(R.id.tv_cadastrese);
-        this.loginConsumer = new LoginConsumer();
+        this.pbLogin = (ProgressBar) findViewById(R.id.pb_login);
         this.login = new Login();
-        this.loginResponseEntity = new ResponseEntity<Login>(HttpStatus.ACCEPTED);
     }
 
-    private class HttpRequestTask extends AsyncTask<Void,Void,Login> {
-        @Override
-        protected Login doInBackground(Void... params) {
-            Log.i("debug",login.getUserName()+":"+login.getPassword());
-            loginResponseEntity = loginConsumer.logar(login);
-            if(loginResponseEntity.getStatusCode() == HttpStatus.OK){
-                chamaTelaPassageiro();
-            }else{
-                //chamaToastErro();
-                login.setToken("ERROR");
-            }
-            return login;
-        }
-
-
-        @Override
-        protected void onPostExecute(Login login) {
-            super.onPostExecute(login);
-
-        }
-    }
 }

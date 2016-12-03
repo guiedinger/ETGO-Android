@@ -2,7 +2,6 @@ package com.application.etgo.etgo;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,13 +10,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import POJOS.Login;
-import ws.REST.LoginConsumer;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import ws.REST.LoginConnectionManager;
 
 public class TelaCadastro extends Activity {
 
     private EditText etLoginCadastrar, etSenhaCadatrar;
     private Login login;
-    private LoginConsumer loginConsumer;
     private Button btCadastrar;
     private ProgressBar pbCadastrar;
 
@@ -26,7 +27,6 @@ public class TelaCadastro extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_cadastro);
-
 
         this.inicializaComponentes();
         this.btCadastrar.setOnClickListener(new View.OnClickListener() {
@@ -37,7 +37,19 @@ public class TelaCadastro extends Activity {
                 Log.i("debug","passou");
                 login.setUserName(etLoginCadastrar.getText().toString());
                 login.setPassword(etSenhaCadatrar.getText().toString());
-                new HttpRequestTask().execute();
+
+                LoginConnectionManager.postForCreate(login).enqueue(new Callback<Login>() {
+                    @Override
+                    public void onResponse(Call<Login> call, Response<Login> response) {
+                        login = response.body();
+                        chamaTelaLogin();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Login> call, Throwable t) {
+                        Log.i("debug","NÃO CADASTROU  :"+t.getMessage());
+                    }
+                });
             }
         });
 
@@ -55,25 +67,9 @@ public class TelaCadastro extends Activity {
         this.etSenhaCadatrar = (EditText)findViewById(R.id.et_senha_cadastrar);
         this.btCadastrar = (Button)findViewById(R.id.bt_cadastrar);
         this.login = new Login();
-        this.loginConsumer = new LoginConsumer();
         this.pbCadastrar = (ProgressBar)findViewById(R.id.pb_cadastrar);
+
     }
 
 
-    private class HttpRequestTask extends AsyncTask<Void,Void,Login>{
-        @Override
-        protected Login doInBackground(Void... params) {
-            Log.i("debug",login.getUserName()+":"+login.getPassword());
-            login = loginConsumer.chamaCadastrar(login);
-            Log.i("debug",login.getUserName()+":"+login.getPassword());
-            return login;
-        }
-
-
-        @Override
-        protected void onPostExecute(Login login) {
-            super.onPostExecute(login);
-            chamaTelaLogin();
-        }
-    }
 }
