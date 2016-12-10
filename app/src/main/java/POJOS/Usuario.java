@@ -4,9 +4,13 @@ public abstract class Usuario {
 
     private Integer idUsuario;
 
-    private Login login;
+    private Token token;
 
     private String nome;
+
+    private String userName;
+
+    private String password;
 
     private String telefone;
 
@@ -14,21 +18,41 @@ public abstract class Usuario {
 
     private Double saldo;
 
-    public Usuario(Integer idUsuario, Login login, String nome, String telefone, String email, Double saldo) {
+    public Usuario(Integer idUsuario, Token token, String nome, String userName, String password, String telefone, String email) {
         this.idUsuario = idUsuario;
-        this.login = login;
+        this.token = token;
         this.nome = nome;
+        this.userName = userName;
+        this.password = password;
         this.telefone = telefone;
         this.email = email;
-        this.saldo = saldo;
     }
 
-    public Usuario(Integer idUsuario, Login login, String nome, String telefone, String email) {
+    public Usuario(Double saldo, Integer idUsuario, Token token, String nome, String userName, String password, String telefone, String email) {
+        this.saldo = saldo;
         this.idUsuario = idUsuario;
-        this.login = login;
+        this.token = token;
         this.nome = nome;
+        this.userName = userName;
+        this.password = password;
         this.telefone = telefone;
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Integer getIdUsuario() {
@@ -39,12 +63,12 @@ public abstract class Usuario {
         this.idUsuario = idUsuario;
     }
 
-    public Login getLogin() {
-        return login;
+    public Token getToken() {
+        return token;
     }
 
-    public void setLogin(Login login) {
-        this.login = login;
+    public void setToken(Token token) {
+        this.token = token;
     }
 
     public String getNome() {

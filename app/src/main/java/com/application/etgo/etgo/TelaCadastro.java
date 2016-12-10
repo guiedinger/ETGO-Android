@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
-import POJOS.Login;
+import POJOS.Token;
+import POJOS.Passageiro;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,8 +19,9 @@ import ws.REST.LoginConnectionManager;
 
 public class TelaCadastro extends Activity {
 
-    private EditText etLoginCadastrar, etSenhaCadatrar;
-    private Login login;
+    private EditText etLoginCadastrar, etSenhaCadatrar, etNomeCadastrar, etTelefoneCadastrar, etEmailCadastrar, etCpfCnpjCadastrar;
+    private Token token;
+    private Passageiro passageiro;
     private Button btCadastrar;
     private ProgressBar pbCadastrar;
 
@@ -35,18 +38,30 @@ public class TelaCadastro extends Activity {
                 btCadastrar.setEnabled(false);
                 pbCadastrar.setVisibility(View.VISIBLE);
                 Log.i("debug","passou");
-                login.setUserName(etLoginCadastrar.getText().toString());
-                login.setPassword(etSenhaCadatrar.getText().toString());
-
-                LoginConnectionManager.postForCreate(login).enqueue(new Callback<Login>() {
+                passageiro.setUserName(etLoginCadastrar.getText().toString());
+                passageiro.setPassword(etSenhaCadatrar.getText().toString());
+                passageiro.setNome(etNomeCadastrar.getText().toString());
+                passageiro.setTelefone(etTelefoneCadastrar.getText().toString());
+                passageiro.setEmail(etEmailCadastrar.getText().toString());
+                passageiro.setCpf(etCpfCnpjCadastrar.getText().toString());
+                LoginConnectionManager.postForCreate(passageiro).enqueue(new Callback<Passageiro>() {
                     @Override
-                    public void onResponse(Call<Login> call, Response<Login> response) {
-                        login = response.body();
-                        chamaTelaLogin();
+                    public void onResponse(Call<Passageiro> call, Response<Passageiro> response) {
+                        passageiro = response.body();
+                        if (response.code()==200){
+                            chamaTelaLogin();
+                        }else{
+                            btCadastrar.setEnabled(true);
+                            pbCadastrar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(TelaCadastro.this, "Dados Inválidos!",Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<Login> call, Throwable t) {
+                    public void onFailure(Call<Passageiro> call, Throwable t) {
+                        btCadastrar.setEnabled(true);
+                        pbCadastrar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(TelaCadastro.this, "Problema ao conectar.",Toast.LENGTH_LONG).show();
                         Log.i("debug","NÃO CADASTROU  :"+t.getMessage());
                     }
                 });
@@ -65,9 +80,14 @@ public class TelaCadastro extends Activity {
     public void inicializaComponentes(){
         this.etLoginCadastrar = (EditText)findViewById(R.id.et_login_cadastrar);
         this.etSenhaCadatrar = (EditText)findViewById(R.id.et_senha_cadastrar);
+        this.etNomeCadastrar = (EditText)findViewById(R.id.et_nome_cadastrar);
+        this.etTelefoneCadastrar = (EditText)findViewById(R.id.et_telefone_cadastrar);
+        this.etEmailCadastrar = (EditText)findViewById(R.id.et_email_cadastrar);
+        this.etCpfCnpjCadastrar = (EditText)findViewById(R.id.et_cpf_cnpj_cadastrar);
         this.btCadastrar = (Button)findViewById(R.id.bt_cadastrar);
-        this.login = new Login();
         this.pbCadastrar = (ProgressBar)findViewById(R.id.pb_cadastrar);
+        this.token = new Token();
+        this.passageiro = new Passageiro();
 
     }
 

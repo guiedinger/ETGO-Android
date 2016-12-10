@@ -11,7 +11,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import POJOS.Login;
+import POJOS.Passageiro;
+import POJOS.Token;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,7 +22,7 @@ public class TelaLogin extends Activity {
 
     private EditText etLogin, etSenha;
     private Button btEntrar;
-    private Login login;
+    private Token token;
     private TextView tvCadastrese;
     private ProgressBar pbLogin;
 
@@ -43,26 +44,30 @@ public class TelaLogin extends Activity {
             public void onClick(View v) {
                 btEntrar.setEnabled(false);
                 pbLogin.setVisibility(View.VISIBLE);
-/*                login.setUserName(etLogin.getText().toString());
-                login.setPassword(etSenha.getText().toString());*/
-                LoginConnectionManager.posForLogin(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Login>() {
+/*                token.setUserName(etLogin.getText().toString());
+                token.setPassword(etSenha.getText().toString());*/
+                LoginConnectionManager.posForLogin(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Passageiro>() {
                     @Override
-                    public void onResponse(Call<Login> call, Response<Login> response) {
-                        if(response.isSuccessful()){
+                    public void onResponse(Call<Passageiro> call, Response<Passageiro> response) {
+                        if(response.code()==200){
+                            response.body();
                             chamaTelaPassageiro();
                         }else{
                             chamaToastDadosInvalidos();
+                            btEntrar.setEnabled(true);
+                            pbLogin.setVisibility(View.INVISIBLE);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Login> call, Throwable t) {
+                    public void onFailure(Call<Passageiro> call, Throwable t) {
                         chamaToastErro();
                         Log.i("debug","io error :"+t.getMessage());
+                        btEntrar.setEnabled(true);
+                        pbLogin.setVisibility(View.INVISIBLE);
                     }
                 });
-                btEntrar.setEnabled(true);
-                pbLogin.setVisibility(View.INVISIBLE);
+
             }
         });
     }
@@ -94,7 +99,7 @@ public class TelaLogin extends Activity {
         this.btEntrar = (Button)findViewById(R.id.bt_entrar);
         this.tvCadastrese = (TextView)findViewById(R.id.tv_cadastrese);
         this.pbLogin = (ProgressBar) findViewById(R.id.pb_login);
-        this.login = new Login();
+        this.token = new Token();
     }
 
 }

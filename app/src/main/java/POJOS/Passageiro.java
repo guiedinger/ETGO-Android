@@ -55,19 +55,9 @@ public class Passageiro extends Usuario implements Serializable{
         this.tipo = tipo;
     }
 
-    private Login logar;
 
-    public Login getLogar() { return logar; }
-
-    public void setLogar(Login logar) { this.logar = logar;}
-
-    public Passageiro(Integer idUsuario, Login login, String nome, String telefone, String email, Double saldo, String cpf) {
-        super(idUsuario, login, nome, telefone, email, saldo);
-        this.cpf = cpf;
-    }
-
-    public Passageiro(Integer idUsuario, Login login, String nome, String telefone, String email, String cpf) {
-        super(idUsuario, login, nome, telefone, email);
+    public Passageiro(Integer idUsuario, Token token, String nome, String userName, String password, String telefone, String email, String cpf) {
+        super(idUsuario, token, nome, userName, password, telefone, email);
         this.cpf = cpf;
     }
 

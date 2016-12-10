@@ -1,6 +1,7 @@
 package ws.REST;
 
-import POJOS.Login;
+import POJOS.Passageiro;
+import POJOS.Token;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -14,13 +15,13 @@ public class LoginConnectionManager {
 
     public static Retrofit retrofit;
 
-    public static Call<Login> postForCreate(Login login){
-        LoginService loginService = getRetrofitInstance().create(LoginService.class);
-        return loginService.chamaCadastrar(login);
+    public static Call<Passageiro> postForCreate(Passageiro passageiro){
+        PassageiroLoginService passageiroLoginService = getRetrofitInstance().create(PassageiroLoginService.class);
+        return passageiroLoginService.chamaCadastrarPassageiro(passageiro);
     }
-    public static Call<Login> posForLogin(String userName, String password){
-        LoginService loginService = getRetrofitInstance().create(LoginService.class);
-        return loginService.loginUsuario(userName, password);
+    public static Call<Passageiro> posForLogin(String userName, String password){
+        PassageiroLoginService passageiroLoginService = getRetrofitInstance().create(PassageiroLoginService.class);
+        return passageiroLoginService.loginPassageiro(userName, password);
     }
     private static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

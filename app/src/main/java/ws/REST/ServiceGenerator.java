@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
-    public static final String API_BASE_URL = "http://192.168.240.239:8080/EtgoServidor/rest/";
+    public static final String API_BASE_URL = "http://192.168.240.187:8080/EtgoServidor/rest/";
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
