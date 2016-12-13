@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gerar novo QR"
-        android:id="@+id/button"
+        android:id="@+id/bt_"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="54dp"
@@ -21,14 +21,13 @@
 
     <TextView
         android:text="Saldo: R$ 80,50"
-        android:textSize="30dp
-        "
+        android:textSize="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp"
-        android:id="@+id/textView2"
+        android:id="@+id/tv_saldo"
         android:textColor="@color/colorPrimaryDark" />
 
 </RelativeLayout>

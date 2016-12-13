@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dlazaro66.qrcodereaderview.QRCodeReaderView;
@@ -23,44 +24,71 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
  * Created by Guilherme on 11/12/2016.
  */
 
-public class TelaLeitor extends Activity implements ZXingScannerView.ResultHandler{
-    private ZXingScannerView mScannerView;
-    private QRCodeReaderView qrCodeReaderView;
+public class TelaLeitor extends Activity implements QRCodeReaderView.OnQRCodeReadListener{
+    String scanningURL;
+    private QRCodeReaderView mydecoderview;
+    private TextView tvQr;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_leitor);
-        inicializaComponentes();
-    }
-    public void inicializaComponentes(){
-        this.qrCodeReaderView = (QRCodeReaderView)findViewById(R.id.qrdecoderview);
+
+
+        tvQr = (TextView)findViewById(R.id.tv_qr);
+        mydecoderview = (QRCodeReaderView) findViewById(R.id.qrdecoderview);
+        //mydecoderview.setFrontCamera();
+        mydecoderview.setBackCamera();
+        mydecoderview.setOnQRCodeReadListener(this);
+
+
     }
 
     @Override
-    public void handleResult(Result result) {
-        Log.e("handle",result.getText());
-        Log.e("handle",result.getBarcodeFormat().toString());
-        Toast.makeText(this, result.getText(), Toast.LENGTH_SHORT).show();
-       /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
-        builder.setMessage(result.getText());
-        AlertDialog alert1 = builder.create();
-        alert1.show();*/
+    public void onQRCodeRead(String text, PointF[] points) {
+
+
+
+        scanningURL=text;
+
+        Toast.makeText(getApplicationContext()," scanned text"+""+scanningURL,Toast.LENGTH_LONG).show();
+        tvQr.setText(scanningURL);
     }
 
-    public void QRScanner(View view){
-        mScannerView = new ZXingScannerView(this);
-        setContentView(mScannerView);
-        mScannerView.setResultHandler(this);
+/*
+    @Override
+    public void cameraNotFound() {
+
+    }
+
+    @Override
+    public void QRCodeNotFoundOnCamImage() {
+
+    }
+*/
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 50);
         }else
-        mScannerView.startCamera();
+        mydecoderview.startCamera();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //mScannerView.stopCamera();
+        mydecoderview.stopCamera();
+                //getCameraManager().stopPreview();
     }
-}
+    }
+
+
+
+
+
