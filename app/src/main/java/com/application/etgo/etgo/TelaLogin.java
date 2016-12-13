@@ -44,9 +44,10 @@ public class TelaLogin extends Activity {
             public void onClick(View v) {
                 btEntrar.setEnabled(false);
                 pbLogin.setVisibility(View.VISIBLE);
+                chamaTelaLeitor();
 /*                token.setUserName(etLogin.getText().toString());
                 token.setPassword(etSenha.getText().toString());*/
-                LoginConnectionManager.posForLogin(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Passageiro>() {
+/*                LoginConnectionManager.posForLogin(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Passageiro>() {
                     @Override
                     public void onResponse(Call<Passageiro> call, Response<Passageiro> response) {
                         if(response.code()==200){
@@ -66,7 +67,7 @@ public class TelaLogin extends Activity {
                         btEntrar.setEnabled(true);
                         pbLogin.setVisibility(View.INVISIBLE);
                     }
-                });
+                });*/
 
             }
         });
@@ -80,6 +81,12 @@ public class TelaLogin extends Activity {
 
     private void chamaTelaPassageiro(){
         Intent itTelaPassageiro = new Intent(this, TelaPassageiro.class);
+        startActivity(itTelaPassageiro);
+        finish();
+    }
+
+    private void chamaTelaLeitor(){
+        Intent itTelaPassageiro = new Intent(this, TelaLeitor.class);
         startActivity(itTelaPassageiro);
         finish();
     }
