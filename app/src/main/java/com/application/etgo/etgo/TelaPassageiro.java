@@ -1,9 +1,12 @@
 package com.application.etgo.etgo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -11,13 +14,19 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.encoder.QRCode;
 
+import POJOS.Passageiro;
+
 /**
  * Created by Guilherme on 23/10/2016.
  */
 
 public class TelaPassageiro extends Activity {
-    ImageView ivQrCode;
-    String QRcode;
+    private ImageView ivQrCode;
+    private TextView tvSaldo;
+    private Button btGerarQR;
+    private String QRcode;
+    private Bundle bundle;
+    private Passageiro passageiro;
     public final static int WIDTH=500;
 
     @Override
@@ -25,12 +34,12 @@ public class TelaPassageiro extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_passageiro);
         this.inicializaComponentes();
+        bundle = getIntent().getExtras();
+        passageiro = (Passageiro) bundle.getSerializable("Passageiro");
+        tvSaldo.setText("Saldo : R$"+passageiro.getSaldo() );
         Thread t = new Thread(new Runnable() {
             public void run() {
-// this is the msg which will be encode in QRcode
-                QRcode="id = ahodsaggdsfd";
-
-
+                QRcode = passageiro.getToken();
 
                 try {
                     synchronized (this) {
@@ -93,5 +102,9 @@ public class TelaPassageiro extends Activity {
 
     public void inicializaComponentes(){
         this.ivQrCode = (ImageView) findViewById(R.id.iv_qr_code_image);
+        this.bundle = new Bundle();
+        this.passageiro = new Passageiro();
+        this.tvSaldo = (TextView)findViewById(R.id.tv_saldo);
+        this.btGerarQR = (Button)findViewById(R.id.bt_gerar_qr);
     }
 }

@@ -11,21 +11,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import POJOS.Empresa;
 import POJOS.Passageiro;
-import POJOS.Token;
+import POJOS.Transportadora;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ws.REST.LoginConnectionManager;
+import ws.REST.ConnectionManager;
 
 public class TelaLogin extends Activity {
 
     private EditText etLogin, etSenha;
     private Button btEntrar;
-    private Token token;
     private TextView tvCadastrese;
     private ProgressBar pbLogin;
-
+    private Passageiro passageiro;
+    private Transportadora transportadora;
+    private Empresa empresa;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +47,18 @@ public class TelaLogin extends Activity {
             public void onClick(View v) {
                 btEntrar.setEnabled(false);
                 pbLogin.setVisibility(View.VISIBLE);
-                chamaTelaLeitor();
-/*                token.setUserName(etLogin.getText().toString());
-                token.setPassword(etSenha.getText().toString());*/
-/*                LoginConnectionManager.posForLogin(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Passageiro>() {
+                //chamaTelaLeitor();
+                passageiro.setUserName(etLogin.getText().toString());
+                passageiro.setPassword(etSenha.getText().toString());
+                ConnectionManager.posForLoginPassageiro(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Passageiro>() {
                     @Override
                     public void onResponse(Call<Passageiro> call, Response<Passageiro> response) {
                         if(response.code()==200){
-                            response.body();
-                            chamaTelaPassageiro();
+                            bundle.putSerializable("Passageiro",response.body());
+                            Intent itTelaPassageiro = new Intent(TelaLogin.this, TelaPassageiro.class);
+                            itTelaPassageiro.putExtras(bundle);
+                            startActivity(itTelaPassageiro);
+
                         }else{
                             chamaToastDadosInvalidos();
                             btEntrar.setEnabled(true);
@@ -67,7 +73,7 @@ public class TelaLogin extends Activity {
                         btEntrar.setEnabled(true);
                         pbLogin.setVisibility(View.INVISIBLE);
                     }
-                });*/
+                });
 
             }
         });
@@ -106,7 +112,10 @@ public class TelaLogin extends Activity {
         this.btEntrar = (Button)findViewById(R.id.bt_entrar);
         this.tvCadastrese = (TextView)findViewById(R.id.tv_cadastrese);
         this.pbLogin = (ProgressBar) findViewById(R.id.pb_login);
-        this.token = new Token();
+        this.passageiro = new Passageiro();
+        this.transportadora = new Transportadora();
+        this.empresa = new Empresa();
+        this.bundle = new Bundle();
     }
 
 }

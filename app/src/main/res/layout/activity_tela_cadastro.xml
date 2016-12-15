@@ -10,16 +10,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_margin="@dimen/activity_horizontal_margin">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView"
-                android:background="@drawable/logotop"
-                android:layout_above="@+id/et_login_cadastrar"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="40dp"
-                android:layout_marginTop="30dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="Cadastro"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="50sp"/>
 
             <EditText
                 android:layout_width="250dp"
@@ -77,16 +74,47 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/et_cpf_cnpj_cadastrar"
-                android:hint="CPF"
+                android:hint="CPF/CNPJ"
                 android:textAlignment="center"
                 android:layout_marginBottom="30dp"
                 android:layout_gravity="center_horizontal"
                 android:inputType="text" />
 
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/rg_tipo_usuario">
+
+                <RadioButton
+                    android:text="Passageiro"
+                    android:checked="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_passageiro"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="Transportadora"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_transportadora"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:text="Empresa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rb_empresa"
+                    android:layout_weight="1" />
+            </RadioGroup>
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
                 <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,7 +130,7 @@
                     android:text="Cadastrar"
                     android:id="@+id/bt_cadastrar"
                     android:layout_marginBottom="50dp"
-                    android:textColor="#ffffffff"
+                    android:textColor="@color/white"
                     android:background="@color/colorPrimary"
                     android:layout_gravity="center_horizontal"
                     android:layout_alignParentBottom="true"

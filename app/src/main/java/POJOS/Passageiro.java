@@ -15,6 +15,16 @@ public class Passageiro extends Usuario implements Serializable{
 
     private TipoPassageiro tipo;
 
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public String getCpf() {
         return cpf;
     }
@@ -56,8 +66,8 @@ public class Passageiro extends Usuario implements Serializable{
     }
 
 
-    public Passageiro(Integer idUsuario, Token token, String nome, String userName, String password, String telefone, String email, String cpf) {
-        super(idUsuario, token, nome, userName, password, telefone, email);
+    public Passageiro(Integer idUsuario,  String nome, String userName, String password, String telefone, String email, String cpf) {
+        super(idUsuario, nome, userName, password, telefone, email);
         this.cpf = cpf;
     }
 

@@ -1,10 +1,10 @@
 package POJOS;
 
-public abstract class Usuario {
+import java.io.Serializable;
+
+public abstract class Usuario implements Serializable {
 
     private Integer idUsuario;
-
-    private Token token;
 
     private String nome;
 
@@ -18,9 +18,8 @@ public abstract class Usuario {
 
     private Double saldo;
 
-    public Usuario(Integer idUsuario, Token token, String nome, String userName, String password, String telefone, String email) {
+    public Usuario(Integer idUsuario, String nome, String userName, String password, String telefone, String email) {
         this.idUsuario = idUsuario;
-        this.token = token;
         this.nome = nome;
         this.userName = userName;
         this.password = password;
@@ -28,10 +27,9 @@ public abstract class Usuario {
         this.email = email;
     }
 
-    public Usuario(Double saldo, Integer idUsuario, Token token, String nome, String userName, String password, String telefone, String email) {
+    public Usuario(Double saldo, Integer idUsuario, String nome, String userName, String password, String telefone, String email) {
         this.saldo = saldo;
         this.idUsuario = idUsuario;
-        this.token = token;
         this.nome = nome;
         this.userName = userName;
         this.password = password;
@@ -61,14 +59,6 @@ public abstract class Usuario {
 
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
-    }
-
-    public Token getToken() {
-        return token;
-    }
-
-    public void setToken(Token token) {
-        this.token = token;
     }
 
     public String getNome() {

@@ -19,8 +19,8 @@ public class Transportadora extends Usuario{
 		this.cnpj = cnpj;
 	}
 
-	public Transportadora(Integer idUsuario, Token token, String nome, String userName, String password, String telefone, String email, String cnpj) {
-		super(idUsuario, token, nome, userName, password, telefone, email);
+	public Transportadora(Integer idUsuario, String nome, String userName, String password, String telefone, String email, String cnpj) {
+		super(idUsuario, nome, userName, password, telefone, email);
 		this.cnpj = cnpj;
 	}
 
