@@ -1,6 +1,7 @@
 package com.application.etgo.etgo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -37,43 +38,44 @@ public class TelaPassageiro extends Activity {
         bundle = getIntent().getExtras();
         passageiro = (Passageiro) bundle.getSerializable("Passageiro");
         tvSaldo.setText("Saldo : R$"+passageiro.getSaldo() );
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                QRcode = passageiro.getToken();
 
-                try {
-                    synchronized (this) {
-                        wait(5000);
-// runOnUiThread method used to do UI task in main thread.
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Bitmap bitmap = null;
-
-                                    bitmap = encodeAsBitmap(QRcode);
-                                    ivQrCode.setImageBitmap(bitmap);
-
-                                } catch (WriterException e) {
-                                    e.printStackTrace();
-                                } // end of catch block
-
-                            } // end of run method
-                        });
-
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-
-
-            }
-        });
-        t.start();
+        carregarQR();
 
     }
+private void carregarQR() {
+    final ProgressDialog progressDialog = ProgressDialog.show(TelaPassageiro.this, null, "Carregando QR");
+    Thread t = new Thread(new Runnable() {
+        public void run() {
+            QRcode = passageiro.getToken();
+            try {
+                synchronized (this) {
+                    wait(5000);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Bitmap bitmap = null;
+                                bitmap = encodeAsBitmap(QRcode);
+                                ivQrCode.setImageBitmap(bitmap);
 
+                            } catch (WriterException e) {
+                                e.printStackTrace();
+                            }
+                            progressDialog.dismiss();
+                        }
+
+                    });
+
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    });
+    t.start();
+}
     // this is method call from on create and return bitmap image of QRCode.
     Bitmap encodeAsBitmap(String str) throws WriterException {
         BitMatrix result;
@@ -98,7 +100,10 @@ public class TelaPassageiro extends Activity {
         return bitmap;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     public void inicializaComponentes(){
         this.ivQrCode = (ImageView) findViewById(R.id.iv_qr_code_image);

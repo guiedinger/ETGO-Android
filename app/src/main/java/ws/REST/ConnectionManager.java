@@ -30,9 +30,19 @@ public class ConnectionManager {
         return transportadoraConsumer.chamaCadastrarTransportadora(transportadora);
     }
 
+    public static Call<Transportadora> posForLoginTransportadora(String userName, String password){
+        TransportadoraConsumer transportadoraConsumer = getRetrofitInstance().create(TransportadoraConsumer.class);
+        return transportadoraConsumer.loginTransportadora(userName, password);
+    }
+
     public static Call<Empresa> postForCreateEmpresa(Empresa empresa){
         EmpresaConsumer empresaConsumer = getRetrofitInstance().create(EmpresaConsumer.class);
         return empresaConsumer.chamaCadastrarEmpresa(empresa);
+    }
+
+    public static Call<Empresa> postForLoginEmpresa(String userName, String password){
+        EmpresaConsumer empresaConsumer = getRetrofitInstance().create(EmpresaConsumer.class);
+        return empresaConsumer.loginEmpresa(userName, password);
     }
 
     private static Retrofit getRetrofitInstance() {

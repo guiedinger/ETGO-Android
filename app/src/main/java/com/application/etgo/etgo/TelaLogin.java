@@ -1,6 +1,7 @@
 package com.application.etgo.etgo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.Serializable;
 
 import POJOS.Empresa;
 import POJOS.Passageiro;
@@ -29,12 +32,13 @@ public class TelaLogin extends Activity {
     private Transportadora transportadora;
     private Empresa empresa;
     private Bundle bundle;
+    private Boolean ioError;
+    private Boolean diError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_login);
-
         this.inicializaComponentes();
         this.tvCadastrese.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,48 +49,97 @@ public class TelaLogin extends Activity {
         this.btEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btEntrar.setEnabled(false);
-                pbLogin.setVisibility(View.VISIBLE);
-                //chamaTelaLeitor();
-                passageiro.setUserName(etLogin.getText().toString());
-                passageiro.setPassword(etSenha.getText().toString());
+                startLoad();
+                ioError = false;
+                diError = false;
                 ConnectionManager.posForLoginPassageiro(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Passageiro>() {
                     @Override
                     public void onResponse(Call<Passageiro> call, Response<Passageiro> response) {
                         if(response.code()==200){
-                            bundle.putSerializable("Passageiro",response.body());
-                            Intent itTelaPassageiro = new Intent(TelaLogin.this, TelaPassageiro.class);
-                            itTelaPassageiro.putExtras(bundle);
-                            startActivity(itTelaPassageiro);
-
+                            chamaTelaPassageiro(response.body());
+                            stopLoad();
                         }else{
-                            chamaToastDadosInvalidos();
-                            btEntrar.setEnabled(true);
-                            pbLogin.setVisibility(View.INVISIBLE);
+                            diErrorTrue();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Passageiro> call, Throwable t) {
-                        chamaToastErro();
-                        Log.i("debug","io error :"+t.getMessage());
-                        btEntrar.setEnabled(true);
-                        pbLogin.setVisibility(View.INVISIBLE);
+                        ioErrorTrue();
                     }
                 });
+
+                ConnectionManager.posForLoginTransportadora(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Transportadora>() {
+                    @Override
+                    public void onResponse(Call<Transportadora> call, Response<Transportadora> response) {
+                        if(response.code()==200) {
+                            chamaTelaLeitor();
+                            stopLoad();
+                        }else{
+                            diErrorTrue();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Transportadora> call, Throwable t) {
+                        ioErrorTrue();
+                    }
+                });
+
+                ConnectionManager.postForLoginEmpresa(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Empresa>() {
+                    @Override
+                    public void onResponse(Call<Empresa> call, Response<Empresa> response) {
+                        Toast.makeText(TelaLogin.this,"Empresa",Toast.LENGTH_SHORT);
+                        diErrorTrue();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Empresa> call, Throwable t) {
+                        ioErrorTrue();
+                    }
+                });
+                if(ioError) {
+                    chamaToastErro();
+                    Log.i("debug", "io error");
+                    btEntrar.setEnabled(true);
+                    pbLogin.setVisibility(View.INVISIBLE);
+                }
+                if(!diError) {
+                    Log.i("debug", "di error");
+                    chamaToastDadosInvalidos();
+                    stopLoad();
+                }
+                //stopLoad();
 
             }
         });
     }
 
+    private void startLoad(){
+        btEntrar.setEnabled(false);
+        pbLogin.setVisibility(View.VISIBLE);
+    }
+
+    private void stopLoad(){
+        btEntrar.setEnabled(true);
+        pbLogin.setVisibility(View.INVISIBLE);
+    }
+    private void ioErrorTrue(){
+        ioError = true;
+    }
+    private void diErrorTrue(){
+        diError = true;
+    }
     private void chamaTelaCadastrar(){
         Intent itTelaCadastrar = new Intent(this, TelaCadastro.class);
         startActivity(itTelaCadastrar);
         finish();
     }
 
-    private void chamaTelaPassageiro(){
+    private void chamaTelaPassageiro(Passageiro passageiro){
+        bundle.putSerializable("Passageiro",passageiro);
         Intent itTelaPassageiro = new Intent(this, TelaPassageiro.class);
+        itTelaPassageiro.putExtras(bundle);
         startActivity(itTelaPassageiro);
         finish();
     }
@@ -116,6 +169,7 @@ public class TelaLogin extends Activity {
         this.transportadora = new Transportadora();
         this.empresa = new Empresa();
         this.bundle = new Bundle();
+
     }
 
 }
