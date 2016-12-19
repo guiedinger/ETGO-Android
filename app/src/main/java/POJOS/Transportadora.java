@@ -10,7 +10,31 @@ public class Transportadora extends Usuario{
 	private List<Motorista> motoristas;
 
 	private List<Linha> linhas;
-	
+
+	public List<Onibus> getOnibus() {
+		return onibus;
+	}
+
+	public void setOnibus(List<Onibus> onibus) {
+		this.onibus = onibus;
+	}
+
+	public List<Motorista> getMotoristas() {
+		return motoristas;
+	}
+
+	public void setMotoristas(List<Motorista> motoristas) {
+		this.motoristas = motoristas;
+	}
+
+	public List<Linha> getLinhas() {
+		return linhas;
+	}
+
+	public void setLinhas(List<Linha> linhas) {
+		this.linhas = linhas;
+	}
+
 	public String getCnpj() {
 		return cnpj;
 	}

@@ -3,6 +3,16 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="250dp"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="30dp"
+        android:id="@+id/tv_valor_passagem"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginTop="20dp"/>
+
     <com.dlazaro66.qrcodereaderview.QRCodeReaderView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -10,17 +20,28 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         tools:context=".Scanning"/>
 
     <TextView
-        android:text="TextView"
-        android:layout_width="200dp"
+        android:text=""
+        android:textAlignment="center"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:id="@+id/tv_qr"
         android:textSize="30sp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/colorPrimaryDark" />
+
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Encerrar viagem"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimaryDark"
+        android:layout_marginTop="30dp"/>
 
 
 </LinearLayout>

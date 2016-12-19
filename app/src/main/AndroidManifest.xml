@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera2"
         android:required="true"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +22,13 @@
         <activity android:name=".TelaCadastro"></activity>
         <activity android:name=".TelaPassageiro"></activity>
         <activity android:name=".TelaLeitor"></activity>
+        <activity android:name=".TelaRecarga"></activity>
+        <activity android:name=".TelaTransportadora"></activity>
+        <activity android:name=".TelaEmpresa"></activity>
+        <activity android:name=".TelaCadastroLinha"></activity>
+        <activity android:name=".TelaCadastroMotorista"></activity>
+        <activity android:name=".TelaCadastroOnibus"></activity>
+        <activity android:name=".TelaInicioViagem"></activity>
     </application>
 
 </manifest>

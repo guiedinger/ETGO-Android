@@ -12,6 +12,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
+
+import java.util.List;
+
 import POJOS.Empresa;
 import POJOS.Passageiro;
 import POJOS.Transportadora;
@@ -20,9 +29,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ws.REST.ConnectionManager;
 
-public class TelaCadastro extends Activity {
+public class TelaCadastro extends Activity implements Validator.ValidationListener{
+    @NotEmpty(message = "Campo precisa ser preenchido.")
+    private EditText etLoginCadastrar;
+    @Password(message = "Senha invalida")
+    private EditText etSenhaCadatrar;
+    @NotEmpty(message = "Campo precisa ser preenchido.")
+    private EditText etNomeCadastrar;
+    @NotEmpty(message = "Campo precisa ser preenchido.")
+    @Length(min = 8, max = 13, message = "Telefone invalido")
+    private EditText etTelefoneCadastrar;
+    @Email(message = "Email invalido")
+    private EditText etEmailCadastrar;
+    @NotEmpty(message = "Campo precisa ser preenchido.")
+    @Length(min = 11, max = 18, message = "CPF/CNPJ Invalido")
+    private EditText etCpfCnpjCadastrar;
 
-    private EditText etLoginCadastrar, etSenhaCadatrar, etNomeCadastrar, etTelefoneCadastrar, etEmailCadastrar, etCpfCnpjCadastrar;
+
     private Passageiro passageiro;
     private Transportadora transportadora;
     private Empresa empresa;
@@ -30,6 +53,7 @@ public class TelaCadastro extends Activity {
     private ProgressBar pbCadastrar;
     private RadioButton rbPassageiro, rbTransportadora, rbEmpresa;
     private RadioGroup rgTipoPassageiro;
+    private Validator validator;
 
 
     @Override
@@ -41,88 +65,110 @@ public class TelaCadastro extends Activity {
         this.btCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startLoad();
-                if(rbPassageiro.isChecked()){
-                passageiro.setUserName(etLoginCadastrar.getText().toString());
-                passageiro.setPassword(etSenhaCadatrar.getText().toString());
-                passageiro.setNome(etNomeCadastrar.getText().toString());
-                passageiro.setTelefone(etTelefoneCadastrar.getText().toString());
-                passageiro.setEmail(etEmailCadastrar.getText().toString());
-                passageiro.setCpf(etCpfCnpjCadastrar.getText().toString());
-                ConnectionManager.postForCreatePassageiro(passageiro).enqueue(new Callback<Passageiro>() {
-                    @Override
-                    public void onResponse(Call<Passageiro> call, Response<Passageiro> response) {
-                        if (response.code()==200){
-                            chamaTelaLogin();
-                        }else{
-                            stopLoad();
-                            Toast.makeText(TelaCadastro.this, "Dados Inválidos!",Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Passageiro> call, Throwable t) {
-                        stopLoad();
-                        Toast.makeText(TelaCadastro.this, "Problema ao conectar.",Toast.LENGTH_LONG).show();
-                        Log.i("debug","NÃO CADASTROU  :"+t.getMessage());
-                    }
-                });
-                }else if(rbEmpresa.isChecked()){
-                    empresa.setUserName(etLoginCadastrar.getText().toString());
-                    empresa.setPassword(etSenhaCadatrar.getText().toString());
-                    empresa.setNome(etNomeCadastrar.getText().toString());
-                    empresa.setEmail(etEmailCadastrar.getText().toString());
-                    empresa.setTelefone(etTelefoneCadastrar.getText().toString());
-                    empresa.setCnpj(etCpfCnpjCadastrar.getText().toString());
-                    ConnectionManager.postForCreateEmpresa(empresa).enqueue(new Callback<Empresa>() {
-                        @Override
-                        public void onResponse(Call<Empresa> call, Response<Empresa> response) {
-                            if (response.code()==200){
-                                chamaTelaLogin();
-                            }else{
-                                stopLoad();
-                                Toast.makeText(TelaCadastro.this, "Dados Inválidos!",Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Empresa> call, Throwable t) {
-                            stopLoad();
-                            Toast.makeText(TelaCadastro.this, "Problema ao conectar.",Toast.LENGTH_LONG).show();
-                            Log.i("debug","NÃO CADASTROU  :"+t.getMessage());
-                        }
-                    });
-                }else if(rbTransportadora.isChecked()){
-                    transportadora.setUserName(etLoginCadastrar.getText().toString());
-                    transportadora.setPassword(etSenhaCadatrar.getText().toString());
-                    transportadora.setNome(etNomeCadastrar.getText().toString());
-                    transportadora.setEmail(etEmailCadastrar.getText().toString());
-                    transportadora.setTelefone(etTelefoneCadastrar.getText().toString());
-                    transportadora.setCnpj(etCpfCnpjCadastrar.getText().toString());
-                    ConnectionManager.postForCreateTransportadora(transportadora).enqueue(new Callback<Transportadora>() {
-                        @Override
-                        public void onResponse(Call<Transportadora> call, Response<Transportadora> response) {
-                            if (response.code()==200){
-                                chamaTelaLogin();
-                            }else{
-                                stopLoad();
-                                Toast.makeText(TelaCadastro.this, "Dados Inválidos!",Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Transportadora> call, Throwable t) {
-                            stopLoad();
-                            Toast.makeText(TelaCadastro.this, "Problema ao conectar.",Toast.LENGTH_LONG).show();
-                            Log.i("debug","NÃO CADASTROU  :"+t.getMessage());
-                        }
-                    });
-                }
-
+                validator.validate();
             }
         });
-
     }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(
+                        this,
+                        message,
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        }
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        startLoad();
+        if(rbPassageiro.isChecked()){
+            passageiro.setUserName(etLoginCadastrar.getText().toString());
+            passageiro.setPassword(etSenhaCadatrar.getText().toString());
+            passageiro.setNome(etNomeCadastrar.getText().toString());
+            passageiro.setTelefone(etTelefoneCadastrar.getText().toString());
+            passageiro.setEmail(etEmailCadastrar.getText().toString());
+            passageiro.setCpf(etCpfCnpjCadastrar.getText().toString());
+            ConnectionManager.postForCreatePassageiro(passageiro).enqueue(new Callback<Passageiro>() {
+                @Override
+                public void onResponse(Call<Passageiro> call, Response<Passageiro> response) {
+                    if (response.code()==200){
+                        chamaTelaLogin();
+                    }else{
+                        stopLoad();
+                        Toast.makeText(TelaCadastro.this, "Dados Inválidos!",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Passageiro> call, Throwable t) {
+                    stopLoad();
+                    Toast.makeText(TelaCadastro.this, "Problema ao conectar.",Toast.LENGTH_LONG).show();
+                    Log.i("debug","NÃO CADASTROU  :"+t.getMessage());
+                }
+            });
+        }else if(rbEmpresa.isChecked()){
+            empresa.setUserName(etLoginCadastrar.getText().toString());
+            empresa.setPassword(etSenhaCadatrar.getText().toString());
+            empresa.setNome(etNomeCadastrar.getText().toString());
+            empresa.setEmail(etEmailCadastrar.getText().toString());
+            empresa.setTelefone(etTelefoneCadastrar.getText().toString());
+            empresa.setCnpj(etCpfCnpjCadastrar.getText().toString());
+            ConnectionManager.postForCreateEmpresa(empresa).enqueue(new Callback<Empresa>() {
+                @Override
+                public void onResponse(Call<Empresa> call, Response<Empresa> response) {
+                    if (response.code()==200){
+                        chamaTelaLogin();
+                    }else{
+                        stopLoad();
+                        Toast.makeText(TelaCadastro.this, "Dados Inválidos!",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Empresa> call, Throwable t) {
+                    stopLoad();
+                    Toast.makeText(TelaCadastro.this, "Problema ao conectar.",Toast.LENGTH_LONG).show();
+                    Log.i("debug","NÃO CADASTROU  :"+t.getMessage());
+                }
+            });
+        }else if(rbTransportadora.isChecked()){
+            transportadora.setUserName(etLoginCadastrar.getText().toString());
+            transportadora.setPassword(etSenhaCadatrar.getText().toString());
+            transportadora.setNome(etNomeCadastrar.getText().toString());
+            transportadora.setEmail(etEmailCadastrar.getText().toString());
+            transportadora.setTelefone(etTelefoneCadastrar.getText().toString());
+            transportadora.setCnpj(etCpfCnpjCadastrar.getText().toString());
+            ConnectionManager.postForCreateTransportadora(transportadora).enqueue(new Callback<Transportadora>() {
+                @Override
+                public void onResponse(Call<Transportadora> call, Response<Transportadora> response) {
+                    if (response.code()==200){
+                        chamaTelaLogin();
+                    }else{
+                        stopLoad();
+                        Toast.makeText(TelaCadastro.this, "Dados Inválidos!",Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Transportadora> call, Throwable t) {
+                    stopLoad();
+                    Toast.makeText(TelaCadastro.this, "Problema ao conectar.",Toast.LENGTH_LONG).show();
+                    Log.i("debug","NÃO CADASTROU  :"+t.getMessage());
+                }
+            });
+        }
+    }
+
     private void startLoad(){
         btCadastrar.setEnabled(false);
         pbCadastrar.setVisibility(View.VISIBLE);
@@ -160,7 +206,8 @@ public class TelaCadastro extends Activity {
         this.rbPassageiro = (RadioButton)findViewById(R.id.rb_passageiro);
         this.rbTransportadora = (RadioButton)findViewById(R.id.rb_transportadora);
         this.rgTipoPassageiro = (RadioGroup)findViewById(R.id.rg_tipo_usuario);
-
+        this.validator = new Validator(this);
+        validator.setValidationListener(this);
     }
 
 

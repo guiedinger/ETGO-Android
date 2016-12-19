@@ -11,8 +11,6 @@ public class Onibus implements Serializable{
 	private String placa;
 
 	private String modelo;
-
-	private TipoAchado tipo;
 	
 	public Integer getIdOnibus() {
 		return idOnibus;
@@ -40,7 +38,12 @@ public class Onibus implements Serializable{
 		this.placa = placa;
 		this.modelo = modelo;
 	}
-	
+
+	@Override
+	public String toString() {
+		return placa;
+	}
+
 	public Onibus(){
 		
 	}

@@ -6,14 +6,28 @@ public class Linha implements Serializable{
 
 	private Integer idLinha;
 
-	private List<Transportadora> transportadora;
-
 	private List<Viagem> viagens;
 
 	private String descricao;
 
 	private TipoServico tipo;
-	
+
+	public List<Viagem> getViagens() {
+		return viagens;
+	}
+
+	public void setViagens(List<Viagem> viagens) {
+		this.viagens = viagens;
+	}
+
+	public TipoServico getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoServico tipo) {
+		this.tipo = tipo;
+	}
+
 	public Integer getIdLinha() {
 		return idLinha;
 	}
@@ -32,7 +46,13 @@ public class Linha implements Serializable{
 		this.idLinha = idLinha;
 		this.descricao = descricao;
 	}
-	public Linha(){
+
+    @Override
+    public String toString() {
+        return descricao;
+    }
+
+    public Linha(){
 		
 	}
 }

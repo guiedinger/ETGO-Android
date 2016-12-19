@@ -17,6 +17,7 @@ import java.io.Serializable;
 import POJOS.Empresa;
 import POJOS.Passageiro;
 import POJOS.Transportadora;
+import POJOS.Usuario;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,8 +33,7 @@ public class TelaLogin extends Activity {
     private Transportadora transportadora;
     private Empresa empresa;
     private Bundle bundle;
-    private Boolean ioError;
-    private Boolean diError;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +50,6 @@ public class TelaLogin extends Activity {
             @Override
             public void onClick(View v) {
                 startLoad();
-                ioError = false;
-                diError = false;
                 ConnectionManager.posForLoginPassageiro(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Passageiro>() {
                     @Override
                     public void onResponse(Call<Passageiro> call, Response<Passageiro> response) {
@@ -59,77 +57,61 @@ public class TelaLogin extends Activity {
                             chamaTelaPassageiro(response.body());
                             stopLoad();
                         }else{
-                            diErrorTrue();
+                            ConnectionManager.posForLoginTransportadora(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Transportadora>() {
+                                @Override
+                                public void onResponse(Call<Transportadora> call, Response<Transportadora> response) {
+                                    if(response.code()==200){
+                                        chamaTelaTransportadora(response.body());
+                                        stopLoad();
+                                    }else{
+                                        ConnectionManager.postForLoginEmpresa(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Empresa>() {
+                                            @Override
+                                            public void onResponse(Call<Empresa> call, Response<Empresa> response) {
+                                                if(response.code()==200){
+                                                    Toast.makeText(TelaLogin.this,"Empresa",Toast.LENGTH_SHORT).show();
+                                                    stopLoad();
+                                                }
+                                                chamaToastDadosInvalidos();
+                                                stopLoad();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<Empresa> call, Throwable t) {
+                                                stopLoad();
+                                                chamaToastErro();
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Transportadora> call, Throwable t) {
+                                    stopLoad();
+                                    chamaToastErro();
+                                }
+                            });
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Passageiro> call, Throwable t) {
-                        ioErrorTrue();
+                        stopLoad();
+                        chamaToastErro();
                     }
                 });
-
-                ConnectionManager.posForLoginTransportadora(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Transportadora>() {
-                    @Override
-                    public void onResponse(Call<Transportadora> call, Response<Transportadora> response) {
-                        if(response.code()==200) {
-                            chamaTelaLeitor();
-                            stopLoad();
-                        }else{
-                            diErrorTrue();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Transportadora> call, Throwable t) {
-                        ioErrorTrue();
-                    }
-                });
-
-                ConnectionManager.postForLoginEmpresa(etLogin.getText().toString(),etSenha.getText().toString()).enqueue(new Callback<Empresa>() {
-                    @Override
-                    public void onResponse(Call<Empresa> call, Response<Empresa> response) {
-                        Toast.makeText(TelaLogin.this,"Empresa",Toast.LENGTH_SHORT);
-                        diErrorTrue();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Empresa> call, Throwable t) {
-                        ioErrorTrue();
-                    }
-                });
-                if(ioError) {
-                    chamaToastErro();
-                    Log.i("debug", "io error");
-                    btEntrar.setEnabled(true);
-                    pbLogin.setVisibility(View.INVISIBLE);
-                }
-                if(!diError) {
-                    Log.i("debug", "di error");
-                    chamaToastDadosInvalidos();
-                    stopLoad();
-                }
-                //stopLoad();
 
             }
         });
     }
 
     private void startLoad(){
-        btEntrar.setEnabled(false);
-        pbLogin.setVisibility(View.VISIBLE);
+        progressDialog = ProgressDialog.show(TelaLogin.this,null,"Carregando");
     }
 
     private void stopLoad(){
-        btEntrar.setEnabled(true);
-        pbLogin.setVisibility(View.INVISIBLE);
+        progressDialog.dismiss();
     }
-    private void ioErrorTrue(){
-        ioError = true;
-    }
-    private void diErrorTrue(){
-        diError = true;
-    }
+
     private void chamaTelaCadastrar(){
         Intent itTelaCadastrar = new Intent(this, TelaCadastro.class);
         startActivity(itTelaCadastrar);
@@ -144,6 +126,13 @@ public class TelaLogin extends Activity {
         finish();
     }
 
+    private void chamaTelaTransportadora(Transportadora transportadora){
+        bundle.putSerializable("Transportadora",transportadora);
+        Intent itTelaTransportadora = new Intent(this, TelaTransportadora.class);
+        itTelaTransportadora.putExtras(bundle);
+        startActivity(itTelaTransportadora);
+        finish();
+    }
     private void chamaTelaLeitor(){
         Intent itTelaPassageiro = new Intent(this, TelaLeitor.class);
         startActivity(itTelaPassageiro);

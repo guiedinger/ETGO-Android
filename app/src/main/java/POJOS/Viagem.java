@@ -11,9 +11,47 @@ public class Viagem implements Serializable{
 
 	private List<Passageiro> passageiros;
 
+	private Onibus onibus;
+
+	private Linha linha;
+
+	private Motorista motorista;
+
 	private Date data;
-	
-	public Integer getIdViagem() {
+
+    public Onibus getOnibus() {
+        return onibus;
+    }
+
+    public void setOnibus(Onibus onibus) {
+        this.onibus = onibus;
+    }
+
+    public Linha getLinha() {
+        return linha;
+    }
+
+    public void setLinha(Linha linha) {
+        this.linha = linha;
+    }
+
+    public Motorista getMotorista() {
+        return motorista;
+    }
+
+    public void setMotorista(Motorista motorista) {
+        this.motorista = motorista;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public Integer getIdViagem() {
 		return idViagem;
 	}
 
