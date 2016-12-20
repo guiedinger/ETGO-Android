@@ -31,7 +31,7 @@ import ws.REST.ConnectionManager;
 
 public class TelaCadastroOnibus extends Activity implements Validator.ValidationListener{
     private TextView tvCadastroOnibus;
-    @Length(min = 5, max = 6, message = "Placa invalida")
+    @Length(min = 6, max = 7, message = "Placa invalida")
     private EditText etPlaca;
     @NotEmpty(message = "Campo necessario")
     private EditText etModelo;
@@ -52,7 +52,7 @@ public class TelaCadastroOnibus extends Activity implements Validator.Validation
         this.btCadastroOnibus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                validator.validate();
             }
         });
     }

@@ -2,6 +2,7 @@ package com.application.etgo.etgo;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PointF;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class TelaLeitor extends Activity implements QRCodeReaderView.OnQRCodeRea
     private Bundle bundle;
     private Double valor;
     private Handler handler;
+    private Button btfinalizarViagem;
 
 
     @Override
@@ -65,7 +68,12 @@ public class TelaLeitor extends Activity implements QRCodeReaderView.OnQRCodeRea
         mydecoderview.setBackCamera();
         mydecoderview.setOnQRCodeReadListener(this);
 
-
+        this.btfinalizarViagem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chamaTelaTransportadora(transportadora);
+            }
+        });
     }
 
     @Override
@@ -140,6 +148,13 @@ public class TelaLeitor extends Activity implements QRCodeReaderView.OnQRCodeRea
         }).start();
     }
 
+    private void chamaTelaTransportadora(Transportadora transportadora){
+        bundle.putSerializable("Transportadora",transportadora);
+        Intent itTelaTransportadora = new Intent(this, TelaTransportadora.class);
+        itTelaTransportadora.putExtras(bundle);
+        startActivity(itTelaTransportadora);
+        finish();
+    }
     @Override
     protected void onPause() {
         super.onPause();
@@ -154,6 +169,7 @@ public class TelaLeitor extends Activity implements QRCodeReaderView.OnQRCodeRea
         this.mydecoderview = (QRCodeReaderView) findViewById(R.id.qrdecoderview);
         this.tvValorPassagem = (TextView)findViewById(R.id.tv_valor_passagem);
         this.handler = new Handler();
+        this.btfinalizarViagem = (Button)findViewById(R.id.bt_encerrar_viagem);
     }
     }
 
